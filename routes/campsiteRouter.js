@@ -1,5 +1,5 @@
 const express = require('express');
-const Campsite = require('../models/campsite'); // will be needed for partnes and promotions as well
+const Campsite = require('../models/campsite'); // will be needed for partners and promotions as well
 
 const campsiteRouter = express.Router();
 
@@ -8,7 +8,7 @@ campsiteRouter.route('/')
     Campsite.find()
     .then(campsites => {
         res.statusCode = 200;
-        res.setHeader = ('Content-Type', 'application/json');
+        res.setHeader('Content-Type', 'application/json');
         res.json(campsites);
     })
     .catch(err => next(err));
@@ -67,7 +67,7 @@ campsiteRouter.route('/:campsiteId')
     .then(response => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
-        res.json(campsite);
+        res.json(response); //check this for promotion or Promotion or response
     })
     .catch(err => next(err));
 }); 
@@ -78,7 +78,7 @@ campsiteRouter.route('/:campsiteId/comments')
     .then(campsite => {
         if (campsite) {
             res.statusCode = 200;
-            res.setHeader = ('Content-Type', 'application/json');
+            res.setHeader('Content-Type', 'application/json');
             res.json(campsite.comments);
         }else {
             err = new Error(`Campsite ${req.params.campsiteId} not found`);
@@ -96,7 +96,7 @@ campsiteRouter.route('/:campsiteId/comments')
             campsite.save()
             .then(campsite => {
                 res.statusCode = 200;
-                res.setHeader = ('Content-Type', 'application/json');
+                res.setHeader('Content-Type', 'application/json');
                 res.json(campsite);
                 })
                 .catch(err => next(err));
@@ -122,7 +122,7 @@ campsiteRouter.route('/:campsiteId/comments')
             campsite.save()
             .then(campsite => {
                 res.statusCode = 200;
-                res.setHeader = ('Content-Type', 'application/json');
+                res.setHeader('Content-Type', 'application/json');
                 res.json(campsite);
                 })
                 .catch(err => next(err));
@@ -141,7 +141,7 @@ campsiteRouter.route('/:campsiteId/comments/:commentId')
     .then(campsite => {
         if (campsite && campsite.comments.id(req.params.commentId)) {
             res.statusCode = 200;
-            res.setHeader = ('Content-Type', 'application/json');
+            res.setHeader('Content-Type', 'application/json');
             res.json(campsite.comments.id(req.params.commentId));
         } else if (!campsite) {
             err = new Error(`Campsite ${req.params.campsiteId} not found`);
