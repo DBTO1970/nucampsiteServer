@@ -11,7 +11,7 @@ const userSchema = new Schema({
     // password: {
     //     type: String,
     //     required: true
-    // }, removed in lesson
+    // }, 
     admin: {
         type: Boolean,
         default: false
