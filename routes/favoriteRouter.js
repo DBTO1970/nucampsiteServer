@@ -7,7 +7,7 @@ const favoriteRouter = express.Router();
 
 favoriteRouter.route('/')
 .options(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res) => res.sendStatus(200))
-.get(cors.cors, (req, res, next) => {
+.get(cors.cors, authenticate.verifyUser, (req, res, next) => {
     Favorite.find({ user: req.user._id })
     .populate('user')
     .populate('campsites')
@@ -18,7 +18,7 @@ favoriteRouter.route('/')
     })
     .catch(err => next(err));
 })
-.post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     Favorite.findOne({user: req.user._id})
     .then(favorites => {
         if(favorites) {
@@ -50,10 +50,7 @@ favoriteRouter.route('/')
     }) 
     .catch(err => next(err));
 })
-.put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
-    console.log('PUT');
-})
-.delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.delete(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     Favorite.findOneAndDelete({user: req.user._id})
     .then(favorite => {
         if (favorite) {
@@ -76,7 +73,7 @@ favoriteRouter.route('/')
 
 favoriteRouter.route('/:campsiteId')
 .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
-.get(cors.cors, (req, res, next) => {
+.get(cors.cors, authenticate.verifyUser, (req, res, next) => {
     Favorite.find({ user: req.user._id})
     .populate('user')
     .populate('campsites')
@@ -87,7 +84,7 @@ favoriteRouter.route('/:campsiteId')
     })
     .catch(err => next(err));
 })
-.post(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     Favorite.findOne({user: req.user._id})
     .then(favorite => {
         if (favorite) {
@@ -118,10 +115,11 @@ favoriteRouter.route('/:campsiteId')
     .catch(err => next(err));
     
 })
-.put(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
-    console.log('PUT');
+.put(cors.corsWithOptions, authenticate.verifyUser, (req, res) => {
+    res.statusCode = 403;
+    res.end(`PUT operation not supported on /favorites/${req.params.campsiteId}`);
 })
-.delete(cors.corsWithOptions, authenticate.verifyUser, authenticate.verifyAdmin, (req, res, next) => {
+.delete(cors.corsWithOptions, authenticate.verifyUser,(req, res, next) => {
     Favorite.findOne({user: req.user._id })
     .then(favorite => {
         if (favorite) {
