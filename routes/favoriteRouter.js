@@ -74,15 +74,8 @@ favoriteRouter.route('/')
 favoriteRouter.route('/:campsiteId')
 .options(cors.corsWithOptions, (req, res) => res.sendStatus(200))
 .get(cors.cors, authenticate.verifyUser, (req, res, next) => {
-    Favorite.find({ user: req.user._id})
-    .populate('user')
-    .populate('campsites')
-    .then(favorites => {
-        res.statusCode = 200;
-        res.setHeader('Content-Type', 'application/json');
-        res.json(favorites);
-    })
-    .catch(err => next(err));
+    res.statusCode = 403;
+    res.end(`GET operation not supported on /favorites/${req.params.campsiteId}`);
 })
 .post(cors.corsWithOptions, authenticate.verifyUser, (req, res, next) => {
     Favorite.findOne({user: req.user._id})
